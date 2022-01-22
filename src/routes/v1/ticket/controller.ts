@@ -1,35 +1,35 @@
-import { Response, Request, Router } from 'express';
+import { Response, Request} from 'express';
 import { ServiceContainer } from '../../../di-container';
 import { ResponseFormat } from '../../../core/ResponseFormat';
 import { messages } from '../../../utils/constants';
-import { Cache } from '../../../services/CacheService/CacheDao';
 import statusCode from 'http-status-codes';
 import Boom from 'boom';
 
 const response = new ResponseFormat();
 
-export const getAllKeys = (req: Request, res: Response) => {
+export const createTicket = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    return base.cacheService.getAllKeys().then((cacheKeys) => {
+    const lines = req.body.numberOfLines as number;
+    return base.lotteryService.createLotteryTicket(lines).then((ticket) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
-            data: cacheKeys,
+            data: ticket,
         });
     }).catch((err) => {
         console.error(err.message);
-        // const { output } = Boom.badRequest(err.message);
-        // return response.handleError(res, output);
+        const { output } = Boom.badRequest(err.message);
+        return response.handleError(res, output);
     });
 };
 
-export const getCacheByKey = (req: Request, res: Response) => {
+export const getAllTickets = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    return base.cacheService.getByKey(req.params.cacheKey).then((cacheResponse) => {
+    return base.lotteryService.getAllTickets().then((tickets) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
-            data: cacheResponse,
+            data: tickets,
         });
     })
     .catch((err) => {
@@ -39,15 +39,13 @@ export const getCacheByKey = (req: Request, res: Response) => {
     });
 };
 
-export const deleteAllCache = (req: Request, res: Response) => {
+export const getTicketById = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    return base.cacheService.deleteAll().then(() => {
+    return base.lotteryService.getTicketById(req.body.ticketId).then((ticket) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
-            data: {
-                message: 'All Cache Data Successfully Deleted',
-            }
+            data: ticket
         });
     }).catch((err) => {
         console.error(err.message);
@@ -56,15 +54,14 @@ export const deleteAllCache = (req: Request, res: Response) => {
     });
 };
 
-export const deleteCacheByKey = (req: Request, res: Response) => {
+export const updateTicketLines = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    return base.cacheService.deleteByKey(req.params.cacheKey).then(() => {
+    const body = req.body as {numberOfLines: number, ticketId: string}
+    return base.lotteryService.updateTicketLines(body.numberOfLines, body.ticketId).then((updatedTicket) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
-            data: {
-                message: 'Cache Key Successfully Deleted',
-            }
+            data: updatedTicket,
         });
     }).catch((err) => {
         console.error(err.message);
@@ -73,16 +70,13 @@ export const deleteCacheByKey = (req: Request, res: Response) => {
     });
 };
 
-export const addToCache = (req: Request, res: Response) => {
+export const getTicketStatus = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    const doc = req.body as Cache;
-    return base.cacheService.set(doc).then(() => {
+    return base.lotteryService.getTicketStatus(req.body.ticketId).then((status) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
-            data: {
-                message: 'New Cache Successfully Added',
-            }
+            data: status,
         });
     }).catch((err) => {
         console.error(err.message);

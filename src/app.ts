@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import Logger from './core/Logger';
 import bodyParser from 'body-parser';
 import { NotFoundError, ApiError, InternalError } from './core/ApiError';
-import { cacheRoute } from './routes/v1/cache/resource';
+import { ticketRoute } from './routes/v1/ticket/resource';
 import { getEnv } from './env';
 import Boom from 'boom';
 import { ResponseFormat } from './core/ResponseFormat';
@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan("tiny"));
 
 // Routes
-app.use('/api/v1/cache', cacheRoute);
+app.use('/api/v1/ticket', ticketRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(new NotFoundError()));

@@ -28,7 +28,8 @@ export class LotteryService {
        return updatedTicket;
     }
 
-    async checkAndUpdateTicket(numberOfLines: number, ticket: Ticket) {
+    //this should only be accessible by this class only
+    protected async checkAndUpdateTicket(numberOfLines: number, ticket: Ticket) {
         let newLines: number[] = [];
         if (ticket.status === TicketStatus.NotChecked) {
             const existingTicketLine = ticket.lines;
@@ -55,5 +56,14 @@ export class LotteryService {
         //TODO: validate that ticket id is valid and a string
         const ticket = await this.ticketDao.getTicketById(ticketId);
         return ticket.status;
+    }
+
+    async getTicketById(ticketId: string) {
+        const ticket = await this.ticketDao.getTicketById(ticketId);
+        return ticket;
+    }
+
+    async getAllTickets() {
+        return this.ticketDao.getTickets();
     }
 }
