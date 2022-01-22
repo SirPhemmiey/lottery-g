@@ -1,7 +1,10 @@
 
+import { IRedis } from "../../redis/Redis";
 import { Ticket, TicketDao, TicketStatus } from './TicketDao';
 
 export class TicketDaoStore implements TicketDao {
+
+    constructor(private store: IRedis) {}
     
     updateTicket(id: string, doc: Ticket): Promise<string> {
         throw new Error('Method not implemented.');

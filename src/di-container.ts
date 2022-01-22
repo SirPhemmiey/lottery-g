@@ -4,13 +4,12 @@
  * Manual dependency injection was used here, but a dependency injection library like typedi could be used as normal practice
  */
 
-import { getMongo } from "./clients/mongodb/mongo";
-import { ENV, getEnv } from "./env";
-import { CacheDao } from "./services/CacheService/CacheDao";
-import { CacheDaoMongo } from "./services/CacheService/CacheDaoMongo";
-import { CacheService } from "./services/CacheService/CacheService";
-
-const CACHE_CAPACITY = getEnv().CACHE_CAPACITY;
+import { getRedis, getRedisClient } from "./redis";
+import { Redis } from "./redis/Redis";
+import { LineGenerator } from "./services/LotteryService/LineGenerator";
+import { LotteryService } from "./services/LotteryService/LotteryService";
+import { TicketRepository } from "./services/TicketService/TicketRepository";
+import { TicketDaoStore } from "./services/TicketService/TicketStore";
 
 /**
  * this is going to be the base service where every other service or service container will inherit from
@@ -22,36 +21,30 @@ export interface Service {
 }
 
 export interface ServiceContainer extends Service {
-    cacheService: CacheService,
-    cacheDao: CacheDao,
+    lotteryService: LotteryService,
+    ticketDaoStore: TicketDaoStore,
+    ticketRepository: TicketRepository,
+    redisService: Redis,
 }
 
 const createContainer = () => {
-    const cacheDao = new CacheDaoMongo(getMongo());
-    const cacheService = new CacheService(cacheDao, CACHE_CAPACITY);
+    const ticketRepository = new TicketRepository();
+    const ticketDaoStore = new TicketDaoStore(getRedis());
+    const lineGenerator = new LineGenerator(3);
+    const lotteryService = new LotteryService(ticketRepository, ticketDaoStore, 
+        lineGenerator);
+    const redisService = new Redis(getRedisClient());
 
     const container: ServiceContainer = {
-        cacheDao,
-        cacheService,
+       lotteryService,
+       ticketDaoStore,
+       ticketRepository,
+       redisService,
     }
     return container;
 };
 
-// const developmentBaseService: Service = {
-//     environment: ENV.Development
-// }; 
 
-// const stagingBaseService: Service = {
-//     environment: ENV.Staging
-// }; 
-
-// const productionBaseService: Service = {
-//     environment: ENV.Production
-// };  
-
-// const developmentService = createContainer(developmentBaseService);
-// const stagingService = createContainer(stagingBaseService);
-// const productionService = createContainer(productionBaseService);
 const service = createContainer();
 
 //to use the service container anywhere else out of context (using the this keyword)
