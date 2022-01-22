@@ -7,6 +7,7 @@ import { getEnv } from './env';
 import Boom from 'boom';
 import { ResponseFormat } from './core/ResponseFormat';
 import morgan from 'morgan';
+import { getRedis, getRedisClient } from './redis';
 const response = new ResponseFormat();
 
 
@@ -20,8 +21,12 @@ const app = express();
 app.set("port", process.env.PORT || 3001);
 
 //this is more like a health check endpoint
-app.get("/", (req, res) => {
-  res.json({ status: "up" })
+app.get("/api/v1/health", (req, res) => {
+  const connected = getRedisClient().connected;
+  if (connected) {
+    res.json({ status: "up", database: "up" });
+  }
+  res.json({ status: "down", database: "down" });
 });
 
 app.use(bodyParser.json());
