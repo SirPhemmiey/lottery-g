@@ -1,0 +1,42 @@
+version: '3.1'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  mongodb_development:
+    image: 'bitnami/mongodb:latest'
+    container_name: 'development_database'
+    platform: linux/amd64 #because i use M1
+    restart: always
+    networks:
+      - app-tier
+    environment:
+      - MONGODB_USERNAME=my_user
+      - MONGODB_PASSWORD=password123
+      - MONGODB_DATABASE=pop-dev
+    ports:
+      - 27017:27017
+    volumes:
+      - 'mongodb_development_data:/bitnami/mongodb'
+
+  mongodb_test:
+    image: 'bitnami/mongodb:latest'
+    container_name: 'test_database'
+    platform: linux/amd64 #because i use M1
+    restart: always
+    networks:
+      - app-tier
+    environment:
+      - MONGODB_USERNAME=my_user
+      - MONGODB_PASSWORD=password123
+      - MONGODB_DATABASE=pop-test
+    ports:
+      - 27018:27017
+    volumes:
+      - 'mongodb_test_data:/bitnami/mongodb'
+
+volumes:
+  mongodb_development_data:
+  mongodb_test_data:
