@@ -4,12 +4,12 @@
  * Manual dependency injection was used here, but a dependency injection library like typedi could be used as normal practice
  */
 
-import { LineGenerator } from "./services/LotteryService/LineGenerator";
 import { LotteryService } from "./services/LotteryService/LotteryService";
-import { TicketRepository } from "./services/TicketService/TicketRepository";
-import { TicketDaoMongo } from "./services/TicketService/TicketDaoMongo";
-import { TicketDao } from "./services/TicketService/TicketDao";
+import { TicketRepository } from "./services/LotteryService/TicketRepository";
+import { TicketDaoMongo } from "./services/LotteryService/TicketDaoMongo";
+import { TicketDao } from "./services/LotteryService/TicketDao";
 import { getMongo } from "./clients/mongodb/mongo";
+import { LineService } from "./services/LotteryService/LineService";
 
 /**
  * this is going to be the base service where every other service or service container will inherit from
@@ -27,11 +27,11 @@ export interface ServiceContainer extends Service {
 }
 
 const createContainer = () => {
-    const lineGenerator = new LineGenerator(3);
-    const ticketRepository = new TicketRepository(lineGenerator);
+    const lineService = new LineService(3);
+    const ticketRepository = new TicketRepository(lineService);
     const ticketDao = new TicketDaoMongo(getMongo());
     const lotteryService = new LotteryService(ticketRepository, ticketDao, 
-        lineGenerator);
+        lineService);
 
     const container: ServiceContainer = {
        lotteryService,

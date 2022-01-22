@@ -73,11 +73,11 @@ export const updateTicketLines = (req: Request, res: Response) => {
 
 export const getTicketStatus = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    return base.lotteryService.getTicketStatus(req.body.ticket_id).then((status) => {
+    return base.lotteryService.checkTicketStatus(req.params.ticket_id).then((results) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
-            data: status,
+            data: {results},
         });
     }).catch((err) => {
         console.error(err.message);

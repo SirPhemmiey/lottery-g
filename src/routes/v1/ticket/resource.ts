@@ -14,8 +14,9 @@ router.get('/ticket/:ticket_id', injectService, getTicketById);
 
 router.put('/ticket/:ticket_id',  validate(updateTicketSchema), injectService, updateTicketLines);
 
-router.get('/ticket/:ticket_id', injectService, getTicketStatus);
+router.get('/status/:ticket_id', injectService, getTicketStatus);
 
 router.delete('/ticket/all', injectService, deleteAll);
+
 
 export { router as lotteryRoute };
