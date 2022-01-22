@@ -33,7 +33,7 @@ export class LotteryService {
                 ticket.lines.push({numbers: [this.lineService.generateLine(), this.lineService.generateLine(), this.lineService.generateLine()]})
             }
         } else {
-            throw new Error('Ticket already checked so it cannot be amended');
+            throw new Error('You cannot amend ticket that has been checked already');
         }
         await this.ticketDao.updateTicket(ticket._id, ticket);
         return ticket;
@@ -44,19 +44,12 @@ export class LotteryService {
     }
 
     async checkTicketStatus(ticketId: string) {
-        //TODO: validate that ticket id is valid and a string
         const ticket = await this.ticketDao.getTicketById(ticketId);
         ticket.status = TicketStatus.Checked;
         await this.ticketDao.updateTicket(ticketId, ticket);
-        const results = this.calculateTicketLotteryValues(ticket);
-        //change the ticket resuly there
-        return results;
+        const results = await this.calculateTicketLotteryValues(ticket);
+        return {ticket_status: ticket.status, lines: results, };
     }
-
-    // async getTicketStatus(ticketId: string) {
-    //     const ticket = await this.ticketDao.getTicketById(ticketId);
-    //     return ticket.status;
-    // }
 
     async getTicketById(ticketId: string) {
         const ticket = await this.ticketDao.getTicketById(ticketId);

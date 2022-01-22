@@ -77,7 +77,7 @@ export const getTicketStatus = (req: Request, res: Response) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
-            data: {results},
+            data: results,
         });
     }).catch((err) => {
         console.error(err.message);
