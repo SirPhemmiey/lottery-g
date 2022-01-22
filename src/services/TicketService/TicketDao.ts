@@ -23,6 +23,5 @@ export interface TicketDao {
     addTicket(doc: Ticket): Promise<string>;
     getTicketById(id: string): Promise<Ticket>;
     getTickets(): Promise<Ticket[]>;
-    getTicketStatus(id: string): TicketStatus;
     updateTicket(id: string, doc: Ticket): Promise<string>;
 }

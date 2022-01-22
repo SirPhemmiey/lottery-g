@@ -4,12 +4,12 @@
  * Manual dependency injection was used here, but a dependency injection library like typedi could be used as normal practice
  */
 
-import { getRedis, getRedisClient } from "./redis";
-import { Redis } from "./redis/Redis";
 import { LineGenerator } from "./services/LotteryService/LineGenerator";
 import { LotteryService } from "./services/LotteryService/LotteryService";
 import { TicketRepository } from "./services/TicketService/TicketRepository";
-import { TicketDaoStore } from "./services/TicketService/TicketStore";
+import { TicketDaoMongo } from "./services/TicketService/TicketDaoMongo";
+import { TicketDao } from "./services/TicketService/TicketDao";
+import { getMongo } from "./clients/mongodb/mongo";
 
 /**
  * this is going to be the base service where every other service or service container will inherit from
@@ -22,24 +22,21 @@ export interface Service {
 
 export interface ServiceContainer extends Service {
     lotteryService: LotteryService,
-    ticketDaoStore: TicketDaoStore,
+    ticketDao: TicketDao,
     ticketRepository: TicketRepository,
-    redisService: Redis,
 }
 
 const createContainer = () => {
     const ticketRepository = new TicketRepository();
-    const ticketDaoStore = new TicketDaoStore(getRedis());
+    const ticketDao = new TicketDaoMongo(getMongo());
     const lineGenerator = new LineGenerator(3);
-    const lotteryService = new LotteryService(ticketRepository, ticketDaoStore, 
+    const lotteryService = new LotteryService(ticketRepository, ticketDao, 
         lineGenerator);
-    const redisService = new Redis(getRedisClient());
 
     const container: ServiceContainer = {
        lotteryService,
-       ticketDaoStore,
+       ticketDao,
        ticketRepository,
-       redisService,
     }
     return container;
 };

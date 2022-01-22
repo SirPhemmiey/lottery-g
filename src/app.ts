@@ -1,13 +1,15 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Logger from './core/Logger';
 import bodyParser from 'body-parser';
+import statusCode from 'http-status-codes';
 import { NotFoundError, ApiError, InternalError } from './core/ApiError';
 import { ticketRoute } from './routes/v1/ticket/resource';
 import { getEnv } from './env';
 import Boom from 'boom';
 import { ResponseFormat } from './core/ResponseFormat';
 import morgan from 'morgan';
-import { getRedisClient } from './redis';
+import mongoose from "mongoose";
+
 const response = new ResponseFormat();
 
 
@@ -21,12 +23,19 @@ const app = express();
 app.set("port", process.env.PORT || 3001);
 
 //this is more like a health check endpoint
-app.get("/api/v1/health", (req, res) => {
-  const connected = getRedisClient().connected;
-  if (connected) {
-    res.json({ status: "up", database: "up" });
+app.get("/api/v1/health", async (req, res) => {
+  const connection = await mongoose.connect(getEnv().MONGO_URI);
+  if (connection.STATES.connected) {
+    res.json({ 
+      system: "up",
+      database: "up",
+     })
+  } else {
+    res.status(statusCode.INTERNAL_SERVER_ERROR).json({
+      system: "down",
+      database: "down",
+    });
   }
-  res.json({ status: "down", database: "down" });
 });
 
 app.use(bodyParser.json());

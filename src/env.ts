@@ -15,17 +15,13 @@ export enum ENV {
 export interface SetUpEnv {
   PORT: string,
   NODE_ENV: string,
-  REDIS_HOST: string,
-  REDIS_PORT: string,
-  REDIS_PASSWORD: string,
+  MONGO_URI: string,
 }
 
 export const getEnv = (): SetUpEnv => {
   return {
     PORT: process.env.PORT ?? '',
     NODE_ENV: process.env.NODE_ENV ?? '',
-    REDIS_PORT: process.env.REDIS_PORT ?? '',
-    REDIS_HOST: process.env.REDIS_HOST ?? '',
-    REDIS_PASSWORD: process.env.REDIS_PASSWORD ?? '',
+    MONGO_URI: process.env.MONGO_URI ?? '',
   }
 }
