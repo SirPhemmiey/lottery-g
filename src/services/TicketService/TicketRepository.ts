@@ -2,6 +2,7 @@
 /**
  * This is a tickets related class. It wil handle every ticket activity
  */
+import { ILineGenerator } from "../LotteryService/LineGenerator";
 import { LineNumbers, TicketStatus } from "./TicketDao";
 
 export interface ITicketRepository {
@@ -11,18 +12,16 @@ export interface ITicketRepository {
 
 export class TicketRepository implements ITicketRepository {
 
+    constructor(private lineGenerator: ILineGenerator) {}
+
     generateTicket(lines: number) {
-        const numberOfLines: number[] = new Array();
-        for (let i = 0; i < lines; i++) {
-            numberOfLines.push(i);
-            console.log({i})
-        }
-        const ticket = {
+        let ticket: any = {
             status: TicketStatus.NotChecked,
-            lines: [{numbers: numberOfLines}]
-          //  lines: [{lineNumbers: numberOfLines}],
+            lines: [],
         };
-        console.log({ticket});
+        for (let i = 0; i < lines; i++) {
+            ticket.lines.push({numbers: [this.lineGenerator.generateLine(), this.lineGenerator.generateLine(), this.lineGenerator.generateLine()]})
+        }
         return ticket;
     }
 }

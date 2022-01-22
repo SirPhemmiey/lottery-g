@@ -27,9 +27,9 @@ export interface ServiceContainer extends Service {
 }
 
 const createContainer = () => {
-    const ticketRepository = new TicketRepository();
-    const ticketDao = new TicketDaoMongo(getMongo());
     const lineGenerator = new LineGenerator(3);
+    const ticketRepository = new TicketRepository(lineGenerator);
+    const ticketDao = new TicketDaoMongo(getMongo());
     const lotteryService = new LotteryService(ticketRepository, ticketDao, 
         lineGenerator);
 

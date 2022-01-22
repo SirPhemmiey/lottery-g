@@ -28,13 +28,15 @@ export class LotteryService {
 
     //this should only be accessible by this class only
     protected async checkAndUpdateTicket(numberOfLines: number, ticket: TicketExtended) {
-        let newLines: number[] = [];
+        //let newLines: number[] = [];
         if (ticket.status === TicketStatus.NotChecked) {
-            const existingTicketLine = ticket.lines;
+            //const existingTicketLine = ticket.lines;
             for (let i = 0; i < numberOfLines; i++) {
-                newLines.push(this.lineGenerator.generateLine())
+                //newLines.push(this.lineGenerator.generateLine())
+                ticket.lines.push({numbers: [this.lineGenerator.generateLine(), this.lineGenerator.generateLine(), this.lineGenerator.generateLine()]})
             }
-            ticket.lines = [...existingTicketLine, { numbers: newLines }];
+            //ticket.lines = [...existingTicketLine, { numbers: newLines }];
+            console.log({final: ticket.lines});
         } else {
             throw new Error('Ticket already checked so it cannot be amended');
         }
