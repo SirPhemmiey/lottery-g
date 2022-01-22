@@ -9,7 +9,7 @@ const response = new ResponseFormat();
 
 export const createTicket = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    const lines = req.body.numberOfLines as number;
+    const lines = req.body.number_of_lines as number;
     return base.lotteryService.createLotteryTicket(lines).then((ticket) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
@@ -56,8 +56,8 @@ export const getTicketById = (req: Request, res: Response) => {
 
 export const updateTicketLines = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    const body = req.body as {numberOfLines: number, ticketId: string}
-    return base.lotteryService.updateTicketLines(body.numberOfLines, body.ticketId).then((updatedTicket) => {
+    const body = req.body as {number_of_lines: number, ticket_id: string}
+    return base.lotteryService.updateTicketLines(body.number_of_lines, body.ticket_id).then((updatedTicket) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,
@@ -72,7 +72,7 @@ export const updateTicketLines = (req: Request, res: Response) => {
 
 export const getTicketStatus = (req: Request, res: Response) => {
     const base = (req as any).service as ServiceContainer;
-    return base.lotteryService.getTicketStatus(req.body.ticketId).then((status) => {
+    return base.lotteryService.getTicketStatus(req.body.ticket_id).then((status) => {
         response.handleSuccess(res, {
             status: messages.SUCCESS,
             statusCode: statusCode.OK,

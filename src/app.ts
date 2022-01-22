@@ -7,7 +7,7 @@ import { getEnv } from './env';
 import Boom from 'boom';
 import { ResponseFormat } from './core/ResponseFormat';
 import morgan from 'morgan';
-import { getRedis, getRedisClient } from './redis';
+import { getRedisClient } from './redis';
 const response = new ResponseFormat();
 
 
