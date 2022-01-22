@@ -3,7 +3,7 @@ import Logger from './core/Logger';
 import bodyParser from 'body-parser';
 import statusCode from 'http-status-codes';
 import { NotFoundError, ApiError, InternalError } from './core/ApiError';
-import { ticketRoute } from './routes/v1/ticket/resource';
+import { lotteryRoute } from './routes/v1/ticket/resource';
 import { getEnv } from './env';
 import Boom from 'boom';
 import { ResponseFormat } from './core/ResponseFormat';
@@ -20,7 +20,7 @@ process.on('uncaughtException', (e) => {
 
 const app = express();
 
-app.set("port", process.env.PORT || 3001);
+app.set("port", process.env.PORT || 3000);
 
 //this is more like a health check endpoint
 app.get("/api/v1/health", async (req, res) => {
@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan("tiny"));
 
 // Routes
-app.use('/api/v1/ticket', ticketRoute);
+app.use('/api/v1/lottery', lotteryRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(new NotFoundError()));

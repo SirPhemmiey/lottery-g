@@ -1,5 +1,5 @@
 
-import { Ticket, TicketDao, TicketStatus } from './TicketDao';
+import { Ticket, TicketDao, TicketExtended, TicketStatus } from './TicketDao';
 import { Schema, Document, Model, Connection, Types } from 'mongoose';
 import { mapToMongoDoc, mapToMongoDocs } from '../../utils/mongoUtils';
 
@@ -20,35 +20,44 @@ const schema = new Schema(
 
 export class TicketDaoMongo implements TicketDao {
 
-    model: Model<Document<Ticket>>;
+    model: Model<Document<TicketExtended>>;
 
     constructor(mongo: Connection) {
-        this.model = mongo.model<Document<Ticket>>('Ticket', schema);
+        this.model = mongo.model<Document<TicketExtended>>('Ticket', schema);
     }
     
     updateTicket(id: string, doc: Ticket): Promise<string> {
-
-        throw new Error('Method not implemented.');
+        return this.model.findByIdAndUpdate(id, {
+            $set: doc as any
+        }).then(() => {
+            return id;
+        });
     }
 
     addTicket(doc: Ticket): Promise<string> {
-        return this.model.create(doc).then(() => {
-            return doc.id;
+        return this.model.create(doc).then((newDoc) => {
+            return newDoc.id;
         });
     }
 
-    async getTicketById(id: string): Promise<Ticket> {
-        return this.model.findById(id).then((doc) => {
+    async getTicketById(id: string): Promise<TicketExtended> {
+        return this.model.findOne({_id: id}).then((doc) => {
             if (!doc) {
                 throw new Error('Ticket not found.');
             }
-            return mapToMongoDoc<Ticket>(doc);
+            return mapToMongoDoc<TicketExtended>(doc);
         });
     }
 
-    getTickets(): Promise<Ticket[]> {
+    getTickets(): Promise<TicketExtended[]> {
        return this.model.find().then((docs) => {
-        return mapToMongoDocs<Ticket>(docs);
+        return mapToMongoDocs<TicketExtended>(docs);
        });
+    }
+
+    deleteAll(): Promise<void> {
+        return this.model.deleteMany({}).then(() => {
+            return;
+        })
     }
 }

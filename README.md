@@ -13,10 +13,9 @@
 - First create .env.development file in the root directory and put the following content in it
 
 ```
-PORT=11700
+PORT=9000
 NODE_ENV=development
-CACHE_CAPACITY=2
-MONGO_URI=mongodb://localhost:27017/fashion-cloud-dev
+MONGO_URI=mongodb://my_user:password123@localhost:27017/pop-dev
 
 ```
 

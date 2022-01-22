@@ -2,7 +2,7 @@ import Logger from './core/Logger';
 import app from './app';
 
 const listener = app.listen(app.get("port"), () => {
-    console.info("Cache service is running at http://localhost:%d", app.get("port"));
+    console.info("Lottery service is running at http://localhost:%d", app.get("port"));
  });
  
  process.on('SIGTERM', () => {

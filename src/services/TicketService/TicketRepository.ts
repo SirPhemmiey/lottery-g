@@ -2,11 +2,10 @@
 /**
  * This is a tickets related class. It wil handle every ticket activity
  */
- import { v4 as uuidv4 } from 'uuid';
-import { Ticket, TicketStatus } from "./TicketDao";
+import { LineNumbers, TicketStatus } from "./TicketDao";
 
 export interface ITicketRepository {
-    generateTicket(lines: number): Ticket;
+    generateTicket(lines: number): {status: TicketStatus, lines: LineNumbers[]};
 }
 
 
@@ -16,13 +15,14 @@ export class TicketRepository implements ITicketRepository {
         const numberOfLines: number[] = new Array();
         for (let i = 0; i < lines; i++) {
             numberOfLines.push(i);
+            console.log({i})
         }
-        const ticket: Ticket = {
-            id: uuidv4(),
+        const ticket = {
             status: TicketStatus.NotChecked,
             lines: [{numbers: numberOfLines}]
           //  lines: [{lineNumbers: numberOfLines}],
         };
+        console.log({ticket});
         return ticket;
     }
 }

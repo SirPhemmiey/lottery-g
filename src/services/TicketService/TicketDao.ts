@@ -13,15 +13,18 @@ export interface LineNumbers {
 }
 
 export interface Ticket {
-    id: string,
+   // id: string,
     lines: LineNumbers[],
     //lines: [{lineNumbers: number[]}],
     status: TicketStatus
 }
 
+export type TicketExtended = Ticket & {_id: string}
+
 export interface TicketDao {
     addTicket(doc: Ticket): Promise<string>;
-    getTicketById(id: string): Promise<Ticket>;
-    getTickets(): Promise<Ticket[]>;
+    getTicketById(id: string): Promise<TicketExtended>;
+    getTickets(): Promise<TicketExtended[]>;
     updateTicket(id: string, doc: Ticket): Promise<string>;
+    deleteAll(): Promise<void>;
 }

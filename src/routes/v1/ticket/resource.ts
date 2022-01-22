@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { injectService } from "../../../middlewares/serviceMidleware";
-import { createTicket, getAllTickets, getTicketById, getTicketStatus, updateTicketLines } from "./controller";
+import { createTicket, deleteAll, getAllTickets, getTicketById, getTicketStatus, updateTicketLines } from "./controller";
 import { validate } from "../../../middlewares/validationMiddleware";
 import { createTicketSchema, updateTicketSchema } from "./schema";
 
@@ -16,4 +16,6 @@ router.put('/ticket/:ticket_id',  validate(updateTicketSchema), injectService, u
 
 router.get('/ticket/:ticket_id', injectService, getTicketStatus);
 
-export { router as ticketRoute };
+router.delete('/ticket/all', injectService, deleteAll);
+
+export { router as lotteryRoute };
