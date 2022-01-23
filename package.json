@@ -22,9 +22,8 @@
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
     "eslint": "eslint . --ext .js,.ts",
-    "oldTest": "jest --forceExit --detectOpenHandles --coverage --verbose",
-    "test": "NODE_ENV=testing jest  --forceExit --runInBand --verbose src/services/CacheService/CacheService.test.ts"
-  },
+    "test": "NODE_ENV=test jest  --forceExit --runInBand --verbose src/services/**/*.test.ts"
+    },
   "dependencies": {
     "@types/helmet": "^4.0.0",
     "bluebird": "^3.7.2",
