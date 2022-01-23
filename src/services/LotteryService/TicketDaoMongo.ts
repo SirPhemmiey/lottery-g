@@ -25,6 +25,12 @@ export class TicketDaoMongo implements TicketDao {
     constructor(mongo: Connection) {
         this.model = mongo.model<Document<TicketExtended>>('Ticket', schema);
     }
+
+    exists(id: string): Promise<boolean> {
+        return this.model.exists({_id: id}).then((value) => {
+            return value;
+        });
+    }
     
     updateTicket(id: string, doc: Ticket): Promise<string> {
         return this.model.findByIdAndUpdate(id, {

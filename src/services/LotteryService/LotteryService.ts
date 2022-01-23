@@ -12,15 +12,19 @@ export class LotteryService {
         if (numberOfLines <= 0) {
             throw new Error('Invalid number of lines')
         }
-        const ticket = this.ticketRepository.generateTicket(numberOfLines);
-        await this.ticketDao.addTicket(ticket);
-        return ticket;
+        const generatedTicket = this.ticketRepository.generateTicket(numberOfLines);
+        const ticket = await this.ticketDao.addTicket(generatedTicket);
+        return {
+            id: ticket,
+            ...generatedTicket,
+        };
     }
 
     async updateTicketLines(numberOfLines: number, ticketId: string) {
-        if (numberOfLines <= 0) {
-            throw new Error('Invalid number of lines')
-        }
+        const ticketExists = await this.ticketExists(ticketId);
+        if (!ticketExists) throw new Error('Ticket does not exist');
+        if (numberOfLines <= 0) throw new Error('Invalid number of lines');
+        
         const ticket = await this.ticketDao.getTicketById(ticketId);
         const updatedTicket = await this.checkAndUpdateTicket(numberOfLines, ticket);
         return updatedTicket;
@@ -44,6 +48,9 @@ export class LotteryService {
     }
 
     async checkTicketStatus(ticketId: string) {
+        const ticketExists = await this.ticketExists(ticketId);
+        if (!ticketExists) throw new Error('Ticket does not exist');
+
         const ticket = await this.ticketDao.getTicketById(ticketId);
         ticket.status = TicketStatus.Checked;
         await this.ticketDao.updateTicket(ticketId, ticket);
@@ -52,6 +59,8 @@ export class LotteryService {
     }
 
     async getTicketById(ticketId: string) {
+        const ticketExists = await this.ticketExists(ticketId);
+        if (!ticketExists) throw new Error('Ticket does not exist');
         const ticket = await this.ticketDao.getTicketById(ticketId);
         return ticket;
     }
@@ -62,5 +71,9 @@ export class LotteryService {
 
     async deleteAll() {
         return this.ticketDao.deleteAll();
+    }
+
+    protected async ticketExists(ticketId: string) {
+        return this.ticketDao.exists(ticketId);
     }
 }

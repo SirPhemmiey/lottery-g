@@ -24,4 +24,5 @@ export interface TicketDao {
     getTickets(): Promise<TicketExtended[]>;
     updateTicket(id: string, doc: Ticket): Promise<string>;
     deleteAll(): Promise<void>;
+    exists(id: string): Promise<boolean>;
 }
