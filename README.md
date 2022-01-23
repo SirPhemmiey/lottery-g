@@ -35,14 +35,6 @@ Tip: You can make a simple `GET` request to the `/api/v1/health` (see [here](htt
 
 Step 3. `yarn start:dev` to start the application locally
 
-- Run the following to start
-
-```
-yarn install
-yarn start
-
-```
-
 ## How to test? 
 
 `yarn test`
