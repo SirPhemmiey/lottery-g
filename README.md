@@ -1,8 +1,4 @@
 
-## This to note
-
-- Validations of input and entries
-- Added Joi
 ### Dependencies
 
 - [Yarn](https://classic.yarnpkg.com/lang/en/docs/install)
