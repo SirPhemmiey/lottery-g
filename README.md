@@ -45,7 +45,7 @@ Please see the Postman collection here: https://documenter.getpostman.com/view/3
 
 ## Things to note 
 
-- I used MongoDB as my database to persist tickets.
+- I used MongoDB as my database to persist lottery tickets.
 - I added `/health` checkendpoint to check if database connection is okay and also if overall system is working as expected. In a production ready system we can integrate monitoring/telemetry systems and APMs like `new relic`, `prometheus`+`grafana` etc
 - I containerized both development and test databases. See the command [here](https://github.com/SirPhemmiey/lottery-game#how-to-run-locally) to know how to spin it up in just one single command. 
 - I added input validations using Joi library
@@ -53,5 +53,5 @@ Please see the Postman collection here: https://documenter.getpostman.com/view/3
 ### Patterns and Principles used in the project
 
 ```
-https://github.com/SirPhemmiey/fct/blob/master/IDEAS.md
+https://github.com/SirPhemmiey/lottery-game/blob/master/IDEAS.md
 ```
