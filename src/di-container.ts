@@ -27,10 +27,10 @@ export interface ServiceContainer extends Service {
 }
 
 const createContainer = () => {
-    const lineService = new LineService(3);
-    const ticketRepository = new TicketRepository(lineService);
+    const lineService = new LineService(3);    
     const ticketDao = new TicketDaoMongo(getMongo());
-    const lotteryService = new LotteryService(ticketRepository, ticketDao, 
+    const ticketRepository = new TicketRepository(ticketDao, lineService,);
+    const lotteryService = new LotteryService(ticketRepository, 
         lineService);
 
     const container: ServiceContainer = {
