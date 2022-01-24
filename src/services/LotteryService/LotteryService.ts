@@ -69,6 +69,7 @@ export class LotteryService {
     protected async calculateTicketLotteryValues(ticket: Ticket): Promise<LineNumbersValue[]> {
         return this.lineService.checkLineNumbers(ticket.lines);
     }
+    
     /**
      * @description - Check ticket status
      * @param {string} ticketId

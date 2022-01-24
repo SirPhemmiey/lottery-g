@@ -10,7 +10,7 @@ beforeAll(async () => {
 
 describe("POST /ticket", () => {
 
-    it('should create a lotter ticket', async () => {
+    it('should create a lottery ticket', async () => {
         const n = 2;
         const response = await service.lotteryService.createLotteryTicket(n);
         expect(response.status).toBe(TicketStatus.NotChecked);
