@@ -7,9 +7,7 @@ export class LotteryService {
     constructor(private ticketRepository: ITicketRepository, private ticketDao: TicketDao, private lineService: ILineService) { }
 
     async createLotteryTicket(numberOfLines: number) {
-        if (numberOfLines <= 0) {
-            throw new Error('Invalid number of lines')
-        }
+        if (numberOfLines <= 0) throw new Error('Invalid number of lines');
         const generatedTicket = this.ticketRepository.generateTicket(numberOfLines);
         const ticket = await this.ticketDao.addTicket(generatedTicket);
         return {
