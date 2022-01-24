@@ -4,9 +4,7 @@ import { ITicketRepository } from "./TicketRepository";
 
 export class LotteryService {
 
-    constructor(private ticketRepository: ITicketRepository,
-        private ticketDao: TicketDao,
-        private lineService: ILineService) { }
+    constructor(private ticketRepository: ITicketRepository, private ticketDao: TicketDao, private lineService: ILineService) { }
 
     async createLotteryTicket(numberOfLines: number) {
         if (numberOfLines <= 0) {
